@@ -1,24 +1,42 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { usePaste } from "@/hooks/usePaste";
 import PageContainer from "@/components/layout/PageContainer";
 import PasteViewer from "@/components/paste/PasteViewer";
 
 export default function ViewPastePage() {
-  // 🔹 Dummy data for now (will be replaced by API later)
-  const mockPaste = {
-    content: `This is a sample paste content.
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { fetchPaste, loading, error } = usePaste();
 
-You can paste multiple lines here.
-Everything is rendered safely.`,
-    remainingViews: 3,
-    expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-  };
+  const [data, setData] = useState<{
+    content: string;
+    remainingViews: number | null;
+    expiresAt: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    fetchPaste(id)
+      .then(setData)
+      .catch(() => navigate("/404"));
+  }, [id, fetchPaste, navigate]);
+
+  if (loading) return null;
+
+  if (error) {
+    navigate("/404");
+    return null;
+  }
+
+  if (!data) return null;
 
   return (
-    <PageContainer title="View Paste">
-      <PasteViewer
-        content={mockPaste.content}
-        remainingViews={mockPaste.remainingViews}
-        expiresAt={mockPaste.expiresAt}
-      />
-    </PageContainer>
+    <PasteViewer
+      content={data.content}
+      remainingViews={data.remainingViews}
+      expiresAt={data.expiresAt}
+    />
   );
 }

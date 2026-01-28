@@ -1,0 +1,15 @@
+{
+  "name": "pastebin-lite",
+  "private": true,
+  "scripts": {
+    "install:api": "npm --prefix apps/api install",
+    "install:web": "npm --prefix apps/web install",
+    "install:all": "npm-run-all install:api install:web",
+    "dev:api": "npm --prefix apps/api run dev",
+    "dev:web": "npm --prefix apps/web run dev",
+    "dev": "npm-run-all --parallel dev:api dev:web"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
