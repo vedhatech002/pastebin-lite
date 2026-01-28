@@ -13,5 +13,4 @@ async function startServer() {
     console.log(`API server running on port ${PORT}`);
   });
 }
-
 startServer();

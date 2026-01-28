@@ -36,6 +36,5 @@ const PasteSchema = new Schema<PasteDocument>({
   },
 });
 
-// Prevent model recompilation in dev / serverless
 export const Paste =
   mongoose.models.Paste || mongoose.model<PasteDocument>("Paste", PasteSchema);
